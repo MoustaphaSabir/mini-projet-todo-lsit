@@ -1,3 +1,4 @@
+
 <?php
     $serveur = "localhost";
     $utilisateur = "root";
@@ -12,30 +13,31 @@
         die("Échec de la connexion : " . mysqli_connect_error());
     }
 
-    // Traiter les données du formulaire
+    // Traiter les données du formulaire pour ajouter une nouvelle tâche
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        foreach ($_POST as $nom_tache => $valeur) {
-            // Insérer les tâches cochées dans la base de données
-            $sql = "INSERT INTO liste (nom_tache) VALUES ('$nom_tache')";
+        if (!empty($_POST['ajouttache'])) {
+            $nouvelle_tache = $_POST['ajouttache'];
+            // Insérer la nouvelle tâche dans la base de données
+            $sql = "INSERT INTO liste (nom_tache) VALUES ('$nouvelle_tache')";
+            echo $sql;
             mysqli_query($connexion, $sql);
         }
     }
 
     // Récupérer les tâches depuis la base de données
     $sql = "SELECT * FROM liste";
-    $listes = mysqli_query($connexion, $sql);
-    // Vérifier si la requête a réussi
-    echo "<ul>";
-        if ($listes) {
-            // print_r($cours);
-            foreach($listes as $liste) {
-                echo '<input type="checkbox" name=" '. $liste['nom_tache'] .'"  id="id_tache">';
+      // Vérifier si la requête a réussi
+    // echo "<ul>";
+    //     if ($listes) {
+    //         // print_r($cours);
+    //         foreach($listes as $liste) {
+    //             echo '<input type="checkbox" name=" '. $liste['nom_tache'] .'"  id="id_tache">';
 
-                echo $liste['nom_tache'] . " : " . $liste['description_taches'] . "<br>";
-            }
-        } else {
-            echo "Erreur : " . mysqli_error($connexion);
-        }
+    //             echo $liste['nom_tache'] . " : " . $liste['description_taches'] . "<br>";
+    //         }
+    //     } else {
+    //         echo "Erreur : " . mysqli_error($connexion);
+    //     }
     $resultat = mysqli_query($connexion, $sql);
 ?>
 
@@ -47,7 +49,7 @@
     <title>Liste des tâches</title>
 </head>
 <body>
-    <h1>Liste des tâches à faire</h1>
+    <h1>TODO-LIST</h1>
     <form action="" method="post">
         <?php
             // Afficher les tâches récupérées depuis la base de données
@@ -59,76 +61,24 @@
         <button type="submit">Enregistrer</button>
     </form>
 
-    <h2>Liste des tâches enregistrées</h2>
+    <h2>Liste des tâches enregistrées</h2> 
     <ul>
         <?php
-        
             // Afficher les tâches cochées
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 foreach ($_POST as $nom_tache => $valeur) {
                     echo "<li>$nom_tache</li>";
                 }
             }
-            
         ?>
-        
     </ul>
 
     <h2>Ajouter une nouvelle tâche</h2>
-    <form action="index.php" method="post">
+    <form action="" method="post">
         <label for="ajouttache">Nouvelle tâche:</label>
-        <input type="text" id="ajouttache" name="">
+        <input type="text" id="ajouttache" name="ajouttache">
         <button type="submit">Ajouter</button>
     </form>
 </body>
 </html>
 
-<?php
-      /*
-      $serveur = "localhost";
-        $utilisateur = "root";
-        $mot_de_passe = "";
-        $base_de_donnees = "liste_tache";
-        // Établir la connexion
-        $connexion = mysqli_connect($serveur, $utilisateur,
-        $mot_de_passe, $base_de_donnees);
-        // Vérifier la connexion
-        if (!$connexion) {
-        die("Échec de la connexion : " . mysqli_connect_error());
-        } else {
-        // echo "Connexion réussie à la base de données.";
-        // print_r($connexion);
-        }
-        echo "<br>";
-        $sql = "SELECT * FROM  liste";
-        $listes = mysqli_query($connexion, $sql);
-        // Vérifier si la requête a réussi
-        echo "<ul>";
-            if ($listes) {
-                // print_r($cours);
-                foreach($listes as $liste) {
-                    echo '<input type="checkbox" name=" '. $liste['nom_tache'] .'"  id="id_tache">';
-
-                    echo $liste['nom_tache'] . " : " . $liste['description_taches'] . "<br>";
-                }
-            } else {
-                echo "Erreur : " . mysqli_error($connexion);
-            }
-            echo '<button type="submit">' . 'Enregistrer' . '</button>';
-
-            echo "</ul>";
-        // Fermer la connexion
-        echo "<br>";
-        // if ($listes) {
-        //     // print_r($cours);
-        //     foreach($listes as $liste) {
-
-        //         echo  $liste['nom_tache'] . "<br>".  $liste['description_taches'] . '<br>';
-        //     }
-        // } else {
-        // echo "Erreur : " . mysqli_error($connexion);
-        // }
-        echo "<br>";
-        */
-        ?>
-        
